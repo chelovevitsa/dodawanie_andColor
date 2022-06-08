@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <title>Dodaj lub usun ucznia</title>
+</head>
+<body>
+    <form class="option">
+        <fieldset class="column">
+          <label for="nazwa">Nazwa</label>
+          <input class="input is-primary is-half" type="text"id="nazwa" required>
+
+          <label for="kolor">Kolor</label>
+          <select class="input is-primary is-half" id="kolor" required>
+            <option></option>
+            <option class="option1"  value="czerwony">czerwony</option>
+            <option class="option2"  value="niebieski">niebieski</option>
+            <option class="option3"  value="zielony">zielony</option>
+          </select>
+          
+          <label for="liczbaSztuk">Liczba Sztuk</label>
+          <input class="input is-primary is-half" type="number"id="liczbaSztuk" required>
+
+          <a class="button is-primary" href="index.html">Powrót</a>
+          <input class="button is-danger" type="submit" value="Dodaj">
+          
+        </fieldset>
+
+        
+      </form>
+    <script>
+        const form = document.querySelector('form')
+
+        form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const data = {
+            nazwa: document.querySelector('#nazwa').value,
+            liczbaSztuk: document.querySelector('#liczbaSztuk').value,
+            kolor: document.querySelector('#kolor').value
+        };
+
+        fetch('/api/produkt', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(data => {
+            document.location.href = 'index.html'
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            });
+        })
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <title>Ćwiczenie 14</title>
+</head>
+<body>
+    <div class="column is-full">
+        <table class="column" id="produkty">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Kolor</th>
+                    <th>Liczba Sztuk</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <a class="button is-primary" href="dodaj-produkt.html">Dodaj produkt</a>
+    </div>
+    
+
+    <script>
+        fetch('/api/produkty')
+            .then(response => response.json())
+            .then(produkty => render(produkty))
+
+        function render(produkty) {
+            const tbody = document.querySelector('#produkty tbody');
+
+            produkty.forEach(produkt => {
+                const tr = document.createElement('TR');
+                const tdNazwa = document.createElement('TD')
+                tdNazwa.innerText = produkt.Nazwa;
+                const tdKolor = document.createElement('TD')
+                tdKolor.innerText = produkt.Kolor;
+                const tdLiczbaSztuk = document.createElement('TD')
+                tdLiczbaSztuk.innerText = produkt.LiczbaSztuk;
+                const tdDel = document.createElement('TD')
+                tdDel.innerHTML = '<button class="button">Usuń</button>';
+
+                tdDel.addEventListener('click', () => {
+
+                    if (confirm('Czy na pewno chcesz usunąć ten przedmiot?')) {
+                        usunProdukt(produkt.Id)
+                    }
+
+                })
+
+                tr.append(tdNazwa, tdKolor, tdLiczbaSztuk, tdDel);
+                tbody.append(tr);
+            });
+
+        }
+
+        function usunProdukt(id) {
+            const data = {
+                id: id
+            }
+
+            fetch('/api/produkt', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(() => {
+                    location.reload()
+                })
+        }
+    </script>
+</body>
+
+</html>
